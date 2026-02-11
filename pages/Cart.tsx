@@ -3,11 +3,22 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, Plus, Minus, ArrowLeft, Shield } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { GlitchButton } from '../components/GlitchButton';
 
 const Cart: React.FC = () => {
   const { cart, removeFromCart, updateQuantity, totalPrice, totalItems } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
+
+  const handleCheckoutClick = () => {
+    if (!user) {
+      // Redireciona para login, passando a informação de que deve voltar para o checkout depois
+      navigate('/login', { state: { from: '/checkout' } });
+    } else {
+      navigate('/checkout');
+    }
+  };
 
   if (cart.length === 0) {
     return (
@@ -105,7 +116,7 @@ const Cart: React.FC = () => {
                 </div>
               </div>
               
-              <GlitchButton fullWidth className="py-5" onClick={() => navigate('/checkout')}>
+              <GlitchButton fullWidth className="py-5" onClick={handleCheckoutClick}>
                 FINALIZAR_PEDIDO
               </GlitchButton>
               

@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { GlitchButton } from '../components/GlitchButton';
 import { useAuth } from '../context/AuthContext';
 import { LogIn, UserPlus, AlertTriangle } from 'lucide-react';
@@ -14,6 +14,10 @@ const Auth: React.FC = () => {
   
   const { login, register } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Obtém a página de origem caso o usuário tenha sido redirecionado
+  const from = (location.state as any)?.from || '/account';
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,13 +26,13 @@ const Auth: React.FC = () => {
     if (isLogin) {
       const success = login(username, password);
       if (success) {
-        navigate('/account');
+        navigate(from);
       } else {
         setError('ACESSO_NEGADO: Credenciais inválidas.');
       }
     } else {
       register(username, email);
-      navigate('/account');
+      navigate(from);
     }
   };
 

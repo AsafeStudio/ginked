@@ -1,9 +1,12 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Terminal, Code, Zap, Eye, Binary } from 'lucide-react';
 import { GlitchButton } from '../components/GlitchButton';
 
 const About: React.FC = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="py-24">
       {/* Hero Section */}
@@ -66,7 +69,7 @@ const About: React.FC = () => {
           <h2 className="text-4xl font-black mb-6 uppercase">Pronto para vestir o ruído?</h2>
           <p className="text-gray-400 mb-10 leading-relaxed">Nossas tiragens sazonais são limitadas. Garanta seu drop exclusivo hoje e tome seu lugar na vanguarda da GINKED.</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <GlitchButton onClick={() => window.location.hash = '#/shop'}>EXPLORAR_CATÁLOGO</GlitchButton>
+            <GlitchButton onClick={() => navigate('/shop')}>EXPLORAR_CATÁLOGO</GlitchButton>
             <GlitchButton variant="outline">CONTATO</GlitchButton>
           </div>
         </div>

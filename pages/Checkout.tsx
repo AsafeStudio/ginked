@@ -1,13 +1,22 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GlitchButton } from '../components/GlitchButton';
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import { Shield, Lock, CreditCard } from 'lucide-react';
 
 const Checkout: React.FC = () => {
   const { totalPrice, clearCart } = useCart();
+  const { user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Segurança adicional: se chegar aqui sem login, volta pro login
+    if (!user) {
+      navigate('/login', { state: { from: '/checkout' } });
+    }
+  }, [user, navigate]);
 
   const handleComplete = (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,6 +24,8 @@ const Checkout: React.FC = () => {
     clearCart();
     navigate('/');
   };
+
+  if (!user) return null;
 
   return (
     <div className="py-24 container mx-auto px-4 max-w-6xl">
@@ -31,9 +42,9 @@ const Checkout: React.FC = () => {
               <span className="text-red-600 font-mono">01.</span> Protocolo_Identidade
             </h2>
             <div className="grid grid-cols-1 gap-4">
-              <input type="email" placeholder="ENDEREÇO_DE_EMAIL" className="w-full bg-white/5 border border-white/10 p-4 font-mono text-sm focus:border-red-600 focus:outline-none" required />
+              <input type="email" placeholder="ENDEREÇO_DE_EMAIL" className="w-full bg-white/5 border border-white/10 p-4 font-mono text-sm focus:border-red-600 focus:outline-none" defaultValue={user.email} required />
               <div className="grid grid-cols-2 gap-4">
-                <input type="text" placeholder="PRIMEIRO_NOME" className="w-full bg-white/5 border border-white/10 p-4 font-mono text-sm focus:border-red-600 focus:outline-none" required />
+                <input type="text" placeholder="PRIMEIRO_NOME" className="w-full bg-white/5 border border-white/10 p-4 font-mono text-sm focus:border-red-600 focus:outline-none" defaultValue={user.username} required />
                 <input type="text" placeholder="SOBRENOME" className="w-full bg-white/5 border border-white/10 p-4 font-mono text-sm focus:border-red-600 focus:outline-none" required />
               </div>
             </div>

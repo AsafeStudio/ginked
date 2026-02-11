@@ -91,15 +91,15 @@ const Footer: React.FC = () => {
               Criamos vestuário autêntico para o mundo físico. Nascidos na cultura urbana, criados no underground. GINKED é para aqueles que encontram beleza no ruído e significado nas ruas.
             </p>
             <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 border border-white/20 flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300">
+              <button onClick={(e) => e.preventDefault()} className="w-10 h-10 border border-white/20 flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300">
                 <Instagram size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 border border-white/20 flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300">
+              </button>
+              <button onClick={(e) => e.preventDefault()} className="w-10 h-10 border border-white/20 flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300">
                 <Twitter size={18} />
-              </a>
-              <a href="#" className="w-10 h-10 border border-white/20 flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300">
+              </button>
+              <button onClick={(e) => e.preventDefault()} className="w-10 h-10 border border-white/20 flex items-center justify-center hover:bg-red-600 hover:border-red-600 transition-all duration-300">
                 <Github size={18} />
-              </a>
+              </button>
             </div>
           </div>
           
@@ -116,10 +116,10 @@ const Footer: React.FC = () => {
           <div>
             <h3 className="text-sm font-bold tracking-widest text-red-600 mb-6 uppercase">Suporte</h3>
             <ul className="space-y-4">
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Envio</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Retornos</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Guia de Tamanhos</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-white transition-colors">Contato</a></li>
+              <li><button onClick={(e) => e.preventDefault()} className="text-gray-400 hover:text-white transition-colors text-left">Envio</button></li>
+              <li><button onClick={(e) => e.preventDefault()} className="text-gray-400 hover:text-white transition-colors text-left">Retornos</button></li>
+              <li><button onClick={(e) => e.preventDefault()} className="text-gray-400 hover:text-white transition-colors text-left">Guia de Tamanhos</button></li>
+              <li><button onClick={(e) => e.preventDefault()} className="text-gray-400 hover:text-white transition-colors text-left">Contato</button></li>
             </ul>
           </div>
         </div>
@@ -127,8 +127,8 @@ const Footer: React.FC = () => {
         <div className="border-t border-white/5 pt-10 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-gray-600">
           <p>© 2024 GINKED_DROPS_V.1.0 // TODOS OS DIREITOS RESERVADOS.</p>
           <div className="flex gap-6">
-            <a href="#" className="hover:text-white">POLÍTICA_DE_PRIVACIDADE</a>
-            <a href="#" className="hover:text-white">TERMOS_DE_SERVIÇO</a>
+            <button onClick={(e) => e.preventDefault()} className="hover:text-white">POLÍTICA_DE_PRIVACIDADE</button>
+            <button onClick={(e) => e.preventDefault()} className="hover:text-white">TERMOS_DE_SERVIÇO</button>
           </div>
         </div>
       </div>
