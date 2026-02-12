@@ -31,3 +31,7 @@ export interface CartContextType {
   totalItems: number;
   totalPrice: number;
 }
+
+export interface LocationState {
+  from?: string;
+}

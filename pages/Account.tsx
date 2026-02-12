@@ -1,5 +1,5 @@
-
 import React, { useEffect } from 'react';
+// Fix: Standardization of react-router-dom hook import
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { GlitchButton } from '../components/GlitchButton';

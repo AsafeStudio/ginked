@@ -1,5 +1,5 @@
-
 import React from 'react';
+// Fix: Standardization of react-router-dom imports
 import { useNavigate } from 'react-router-dom';
 import { Terminal, Code, Zap, Eye, Binary } from 'lucide-react';
 import { GlitchButton } from '../components/GlitchButton';

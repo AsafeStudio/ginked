@@ -1,5 +1,5 @@
-
 import React, { useState, useEffect } from 'react';
+// Fix: Cleaning up named imports from react-router-dom
 import { useParams, useNavigate } from 'react-router-dom';
 import { ShoppingCart, Heart, Share2, Ruler, ShieldCheck, RefreshCw } from 'lucide-react';
 import { PRODUCTS, SIZES } from '../constants';

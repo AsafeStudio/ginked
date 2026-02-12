@@ -1,5 +1,5 @@
-
 import React, { useState, useMemo } from 'react';
+// Fix: Standardization of react-router-dom imports
 import { Link } from 'react-router-dom';
 import { Filter, SlidersHorizontal, ChevronDown } from 'lucide-react';
 import { PRODUCTS, CATEGORIES } from '../constants';

@@ -1,5 +1,5 @@
-
 import React from 'react';
+// Fix: Cleaning up named imports from react-router-dom
 import { Link } from 'react-router-dom';
 import { ArrowRight, Zap, Target, Cpu } from 'lucide-react';
 import { GlitchButton } from '../components/GlitchButton';

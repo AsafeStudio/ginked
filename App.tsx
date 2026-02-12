@@ -1,18 +1,19 @@
 import React from 'react';
-import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import { Layout } from './components/Layout.tsx';
-import { CartProvider } from './context/CartContext.tsx';
-import { AuthProvider } from './context/AuthContext.tsx';
+// Fix: Using HashRouter for better compatibility with GitHub Pages (base: './') and cleaning up imports
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { Layout } from './components/Layout';
+import { CartProvider } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
 
 // Pages
-import Home from './pages/Home.tsx';
-import Shop from './pages/Shop.tsx';
-import ProductDetail from './pages/ProductDetail.tsx';
-import About from './pages/About.tsx';
-import Cart from './pages/Cart.tsx';
-import Checkout from './pages/Checkout.tsx';
-import Auth from './pages/Auth.tsx';
-import Account from './pages/Account.tsx';
+import Home from './pages/Home';
+import Shop from './pages/Shop';
+import ProductDetail from './pages/ProductDetail';
+import About from './pages/About';
+import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
+import Auth from './pages/Auth';
+import Account from './pages/Account';
 
 const App: React.FC = () => {
   return (

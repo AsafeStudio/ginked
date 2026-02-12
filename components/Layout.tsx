@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+// Fix: Standardizing react-router-dom imports
 import { Link, useLocation } from 'react-router-dom';
 import { ShoppingBag, Menu, X, Instagram, Twitter, Github, User } from 'lucide-react';
-import { useCart } from '../context/CartContext.tsx';
-import { useAuth } from '../context/AuthContext.tsx';
+// Fix: Removing .tsx extension from local imports
+import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 
 const Header: React.FC = () => {
   const { totalItems } = useCart();

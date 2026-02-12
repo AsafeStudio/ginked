@@ -3,7 +3,8 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { GlitchButton } from '../components/GlitchButton';
 import { useAuth } from '../context/AuthContext';
-import { LogIn, UserPlus, AlertTriangle } from 'lucide-react';
+import { LogIn, UserPlus, AlertTriangle, Mail, Loader2, CheckCircle } from 'lucide-react';
+import { LocationState } from '../types';
 
 const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -11,30 +12,66 @@ const Auth: React.FC = () => {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  const [isPending, setIsPending] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   
   const { login, register } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Obtém a página de origem caso o usuário tenha sido redirecionado
-  const from = (location.state as any)?.from || '/account';
+  const state = location.state as LocationState;
+  const from = state?.from || '/account';
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setIsPending(true);
 
-    if (isLogin) {
-      const success = login(username, password);
-      if (success) {
-        navigate(from);
+    try {
+      if (isLogin) {
+        const { error: loginError } = await login(email, password);
+        if (loginError) {
+          setError(`ACESSO_NEGADO: ${loginError}`);
+        } else {
+          navigate(from);
+        }
       } else {
-        setError('ACESSO_NEGADO: Credenciais inválidas.');
+        const { error: regError, needsConfirmation } = await register(username, email, password);
+        if (regError) {
+          setError(`FALHA_PROTOCOLO: ${regError}`);
+        } else if (needsConfirmation) {
+          setShowConfirmation(true);
+        } else {
+          navigate(from);
+        }
       }
-    } else {
-      register(username, email);
-      navigate(from);
+    } catch (err) {
+      setError('ERRO_CRÍTICO_DE_CONEXÃO: O terminal não respondeu.');
+    } finally {
+      setIsPending(false);
     }
   };
+
+  if (showConfirmation) {
+    return (
+      <div className="py-24 container mx-auto px-4 flex justify-center items-center min-h-[70vh]">
+        <div className="max-w-md w-full border border-red-600/30 bg-neutral-950 p-12 text-center relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-full h-1 bg-red-600 animate-pulse"></div>
+          <div className="w-20 h-20 bg-red-600/10 mx-auto flex items-center justify-center text-red-600 mb-8 rounded-full border border-red-600/20">
+            <Mail size={40} />
+          </div>
+          <h2 className="text-3xl font-black mb-6 uppercase tracking-tighter">VERIFIQUE_SEU_SINAL</h2>
+          <p className="text-gray-400 font-mono text-xs leading-relaxed mb-10 uppercase tracking-widest">
+            Um link de ativação foi enviado para <span className="text-white font-bold">{email}</span>. 
+            Acesse seu e-mail para autorizar sua entrada na rede GINKED.
+          </p>
+          <GlitchButton variant="outline" fullWidth onClick={() => setShowConfirmation(false)}>
+            VOLTAR_AO_TERMINAL
+          </GlitchButton>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="py-24 container mx-auto px-4 flex justify-center items-center min-h-[70vh]">
@@ -61,42 +98,44 @@ const Auth: React.FC = () => {
         </h2>
 
         {error && (
-          <div className="mb-6 p-4 bg-red-600/10 border border-red-600/50 text-red-500 text-xs font-mono flex items-center gap-3 animate-pulse">
-            <AlertTriangle size={16} />
+          <div className="mb-6 p-4 bg-red-600/10 border border-red-600/50 text-red-500 text-[10px] font-mono flex items-center gap-3">
+            <AlertTriangle size={16} className="shrink-0" />
             <span>{error}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-4">
-            <div>
-              <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-widest">USR_IDENTIDADE</label>
-              <input 
-                type="text" 
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                placeholder="NOME_DE_USUARIO" 
-                className="w-full bg-white/5 border border-white/10 p-4 font-mono text-sm focus:border-red-600 focus:outline-none transition-colors"
-                required 
-              />
-            </div>
-            
             {!isLogin && (
               <div>
-                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-widest">EMAIL</label>
+                <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-widest">USR_IDENTIDADE</label>
                 <input 
-                  type="email" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="ENDERECO_DE_EMAIL" 
+                  type="text" 
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="COIN_NAME_OU_ALIAS" 
                   className="w-full bg-white/5 border border-white/10 p-4 font-mono text-sm focus:border-red-600 focus:outline-none transition-colors"
                   required 
+                  disabled={isPending}
                 />
               </div>
             )}
+            
+            <div>
+              <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-widest">EMAIL_DE_REDE</label>
+              <input 
+                type="email" 
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="SEU@EMAIL.SYS" 
+                className="w-full bg-white/5 border border-white/10 p-4 font-mono text-sm focus:border-red-600 focus:outline-none transition-colors"
+                required 
+                disabled={isPending}
+              />
+            </div>
 
             <div>
-              <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-widest">SENHA</label>
+              <label className="block text-[10px] font-mono text-gray-500 mb-2 uppercase tracking-widest">CHAVE_DE_ACESSO</label>
               <input 
                 type="password" 
                 value={password}
@@ -104,22 +143,27 @@ const Auth: React.FC = () => {
                 placeholder="••••••••" 
                 className="w-full bg-white/5 border border-white/10 p-4 font-mono text-sm focus:border-red-600 focus:outline-none transition-colors"
                 required 
+                disabled={isPending}
               />
             </div>
           </div>
 
-          <GlitchButton type="submit" fullWidth className="py-5">
+          <GlitchButton type="submit" fullWidth className="py-5" disabled={isPending}>
             <div className="flex items-center gap-3">
-              {isLogin ? <LogIn size={18} /> : <UserPlus size={18} />}
-              <span>{isLogin ? 'EXECUTAR_LOGIN' : 'FINALIZAR_CADASTRO'}</span>
+              {isPending ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                isLogin ? <LogIn size={18} /> : <UserPlus size={18} />
+              )}
+              <span>{isPending ? 'PROCESSANDO...' : (isLogin ? 'EXECUTAR_LOGIN' : 'SOLICITAR_ACESSO')}</span>
             </div>
           </GlitchButton>
         </form>
 
         <div className="mt-8 pt-8 border-t border-white/5 text-center">
           <p className="text-[10px] text-gray-600 font-mono leading-relaxed uppercase">
-            Acesso restrito a membros do coletivo GINKED. <br />
-            {isLogin ? 'Login: teste | Senha: teste1' : 'Seus dados estarão protegidos.'}
+            Acesso criptografado via Supabase Auth Protocol. <br />
+            {isLogin ? 'Esqueceu sua chave? Tente o suporte.' : 'Certifique-se de usar um email válido para confirmação.'}
           </p>
         </div>
       </div>

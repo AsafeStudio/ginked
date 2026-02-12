@@ -1,5 +1,5 @@
-
 import React from 'react';
+// Fix: Standardizing named imports from react-router-dom
 import { Link, useNavigate } from 'react-router-dom';
 import { Trash2, Plus, Minus, ArrowLeft, Shield } from 'lucide-react';
 import { useCart } from '../context/CartContext';
